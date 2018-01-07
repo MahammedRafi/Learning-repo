@@ -1,0 +1,8 @@
+package com.learning.dataStructure;
+
+public class LoopIteration {
+	public static void main(String args[]){
+		System.out.println("Hello");
+	}
+
+}
