@@ -1,0 +1,4 @@
+com\jcg\prop\DatabaseProperties.class
+com\jcg\prop\JmsProperties.class
+com\jcg\prop\ApplicationProperties.class
+com\jcg\prop\PropertiesConstants.class
