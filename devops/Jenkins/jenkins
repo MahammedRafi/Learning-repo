@@ -1,0 +1,47 @@
+Jenkins
+
+Continuous integration phases:
+=-----------------------------
+->repository: monitoring the repository if any new commit is called poll scm
+->Integrate : Integrate the change
+->Build: 
+	compile,test,package,deploy, code average, code analysis
+	
+--------------------------------
+
+Jenkins flexibility:
+->jenkins is a highly confiugurable system by itself
+->The additional community developed plugins provide even more flexibility
+->by Combaining jenkins with ant, gradle  or other build automatin tools, the possibilities are limitless
+
+->acts as a cron server replacement
+-------------------------------
+
+Jenkins tasks:
+Job-Task
+
+*Global system configuration
+-tools
+-environment variables	
+*Node configuration:
+*Plugin configuration
+*Job Configuration-tasks
+	-Where to run (label)
+	-when to run task
+		*schedule
+		*on-demand
+	-what it has to do
+ 
+ 
+ P.S:If there is no node for executing job attached then job run on its own system(default behaviour)
+ 
+ Installation of jenkins:-
+ -----------------------
+ pre requisite:
+ Java
+ 
+ Opening jenkin:
+ 
+ 
+
+ http//<machine_name>:8080/

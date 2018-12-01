@@ -1,0 +1,87 @@
+
+mvn archetype:generate
+mvn remote repo: https://repo1.maven.repo
+
+%mvn [plugin-name]:[goal-name]
+%mvn compiler:compiler
+
+plugin types:
+->buid plugin
+->reporting plugins
+
+defining plugin
+->what is the plugin
+<groupid></groupid>
+<artifactid></artifactid>
+<version></version>
+
+ 
+
+<executions>
+	<execution>
+	->when to use plugin
+		<phase>test</phase> // By using plugin we can change the default life cycle of maven. here, we are telling maven to execute given plugin after test phase(iso package(default life cycle of maven))
+		<goals>
+			<goal>run</goal>--(mvn compile->compile_plugin->run->plugin
+		</goals>
+		<configuration>
+			->what exactly plug in has to do
+		</configuration>
+	</execution>
+<executions>
+
+
+->know about plugins/practice
+->snapshot
+->module
+if we want to build one module from parent use following command ->mvn [install] -pl <module_name>
+->JBoss deployment plugin
+->Deployment automation
+
+Maven update version:
+---------------------
+
+syntax:mvn versions:set -DnewVesion=your_new_vesion
+ex: mvn versions:set -DnewVersion=2.1.1
+mvn version:commit
+mvn version:revert
+
+Maven site:
+----------
+mvn site
+
+command line options:
+--------------------
+-D : defines a system property
+-P : activate a profile
+-O : works offline without accessing network
+-f : specific an alternate of POM.xml
+-s : alternate settings.xml
+-fn : never fail the build
+-q : show only error
+-X : debug output
+
+
+profiles
+---------
+profile->invoke plugins explicitely
+
+maven code coverage plugin:
+---------------------------
+mvn cobertura:cobertura->for this we need to have cobertura plug in in pom.xml
+
+source code analysis:
+--------------------
+download sonarQube from url:https://docs.sonarqube.org/latest/setup/get-started-2-minutes/
+once download follow up the steps to start sonar qube
+open URL: https://localhost:9000
+token rafi: 97321578dbe6945fa8e8086bf29bf87eb86fd5d8
+
+mvn sonar:sonar \
+  -Dsonar.host.url=http://localhost:9000 \
+  -Dsonar.login=97321578dbe6945fa8e8086bf29bf87eb86fd5d8
+download sonarqube scanner
+
+add maven plugin ->sonar-maven-plugin
+
+mvn sonar:sonar
