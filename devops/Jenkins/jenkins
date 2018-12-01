@@ -51,5 +51,6 @@ Job-Task
  
  git repository
 	->Frequency of polling
--Build
--
+->update workspace
+->Build
+->
