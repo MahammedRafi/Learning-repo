@@ -45,3 +45,11 @@ Job-Task
  
 
  http//<machine_name>:8080/
+ 
+ CI implementation:
+ -------------------
+ 
+ git repository
+	->Frequency of polling
+-Build
+-
