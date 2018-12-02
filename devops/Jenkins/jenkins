@@ -44,7 +44,7 @@ Job-Task
  
  
 
- http//<machine_name>:8080/
+ http://<machine_name>:8080/
  
  CI implementation:
  -------------------
@@ -52,5 +52,5 @@ Job-Task
  git repository
 	->Frequency of polling
 ->update workspace
-->Build
-->as
+->Build (mvn install package install)
+->
