@@ -72,6 +72,7 @@ mvn cobertura:cobertura->for this we need to have cobertura plug in in pom.xml
 
 source code analysis:
 --------------------
+credentials:admin/admin
 download sonarQube from url:https://docs.sonarqube.org/latest/setup/get-started-2-minutes/
 once download follow up the steps to start sonar qube
 open URL: https://localhost:9000

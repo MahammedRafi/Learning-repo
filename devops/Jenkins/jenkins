@@ -43,7 +43,7 @@ Job-Task
  Opening jenkin:
  
  
-
+credentials:rafi/rafi
  http://<machine_name>:8080/
  
  CI implementation:
@@ -54,3 +54,8 @@ Job-Task
 ->update workspace
 ->Build (mvn install package install)
 ->
+
+
+echo "Found new commit"
+cd maven/MavenSample/mod2
+mvn clean package
