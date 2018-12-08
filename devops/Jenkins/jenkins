@@ -59,3 +59,14 @@ credentials:rafi/rafi
 echo "Found new commit"
 cd maven/MavenSample/mod2
 mvn clean package
+
+URL options:
+http://localhost:8080/jenkins/exit -shutdown
+http://localhost:8080/jenkins/restart-restart
+http://localhost:8080/jenkins/reload-reload
+
+backup jenkins home:
+--------------------
+jenkins home directory is nothing but the location on your drive  where jenkins store  all information  for the job, build etc.
+
+backup plugin
