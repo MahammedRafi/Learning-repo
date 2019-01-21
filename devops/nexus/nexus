@@ -1,0 +1,195 @@
+Nexus Artifact Repository
+Nexus Artifact Repository is a Repository Manager that helps to proxy, collect and manage dependencies.
+
+The two main advantages are:
+
+Easy distribution of Software
+Collaboration with other developers made easy.
+
+
+Artifacts are the End Products of the development lifecycle.
+Artifacts are used in different contexts like
+Describes function
+Describes design
+Project plans
+Risk assessments.
+
+The advantages of artifacts are:
+
+Reliability
+Composability
+Security
+Shareability
+
+The Basic Elements of Nexus are listed below as portrayed in the picture.
+
+Component
+Assets
+Repository
+
+
+Components
+A Component resource is embraced as a part of our application at run-time, testing time or as a part of the build process.
+It can be an image (static resource) or an entire application.
+Components are the archives of different files namely:
+
+Java bytecode in class files
+C object files
+Text files (For example: PDF, music files)
+
+
+Component Archives Format
+As we have seen earlier, components are the archives of different files. Archives are supported in different formats like:
+
+Java JAR, WAR, EAR formats
+Plain ZIP or .tar.gz files
+Other package formats such as NuGet packages, Ruby gems, NPM packages
+Executable formats such as .exe or .sh files, Android APK files, various installer formats.
+
+Storage of Components
+Artifacts are stored in the form coordinate structure namely:
+
+GroupId - Group identifier groups the set of components into one logical group.
+ArtifactId - Identifier for a single software component.
+Version - Version must follow established semantic versioning
+It is called GAV Coordinate.
+
+Confused about what is JAR? A JAR file is a product that is generated after the build stage of the project in the open source tool like Jenkins.
+
+To know more about Jenkins, refer to the course Jenkins.
+
+Assets
+The actual archive file is an asset associated with the component.
+One-to-many relationship with the component. A Component can have numerous assets associated with it.
+Example:
+
+JAR component of Maven contains:
+
+POM file
+JAR files of project
+Both of which constitute as individual assets to the same component.
+
+Central Repository
+A collection of Components.
+Examples:
+
+Maven Central
+The NuGet Gallery
+RubyGems.org
+npmjs.org
+Numerous tools access components in these repositories:
+
+Other package formats such as NuGet packages, Ruby gems, NPM packages
+Executable formats such as .exe or .sh files, Android APK files, various installer formats."
+
+
+Repository Management
+Repository Manager
+Manages all the repositories that the team of developers can interact with, supported by the dedicated server.
+Enable greater collaboration between developers.
+Wider distribution of software, by facilitating the exchange and usage of binary components.
+Core Features of the Repository Manager:
+
+Proxy: It helps us in proxying in components located in remote which in turn saves the factors of bandwidth and time.
+Host: Hosts a repository by providing a deployment target of internal software components to the organization.
+
+
+Capabilities and Advantages
+Capabilities of Repository Manager
+Efficient search of components
+Integration with security systems like LDAP
+Hosts external components
+Controlled access to the components
+Advantages
+Improved software build
+Improved collaboration
+Reduced Bandwidth and Time
+Scalability
+
+The project flow is depicted in the form of a diagram here.
+
+IDE: Place where developers write the source code.
+Source Control: Helps in version control of the code.
+Build tool: Builds up a project to artifacts it in the form of WAR, JAR. Example Maven
+Repository Manager: The artifacts are stored in the Repository for collaborative development.
+
+
+Default Username and Password
+Username: admin
+Password: admin123.
+
+Admin Features
+Repository
+Manages all Repositories and related configurations.
+
+IQ Server
+Configuring of the connection of Nexus Repository Manager to Nexus IQ Server.
+
+Security
+Authentication and authorization features which include Privileges, Roles, LDAP.
+
+Support
+Administers and monitor the repository manager.
+
+System
+The general configuration for getting started and running the repository manager
+
+Repository Policy (Artifact Type)
+Releases
+Specific Point in-time Releases.
+Solid and Stable
+PGP signatures and checksums verify the authenticity and integrity.
+Central Maven stores Release Artifacts.
+Snapshots
+Captures the work in Progress.
+Named with version and Timestamp.
+
+
+System
+System gives access to many configuration features like:
+Bundles
+Capabilities
+Email/SMTP server configuration
+Nodes for high availability
+HTTP/HTTPS proxy server configuration
+Base URL for an application and repository manager
+Tasks
+
+System - Bundles
+The Nexus Repository Manager application runs on the OSGi container (Open Services Gateway initiative), Apache Felix.
+Features are maintained as OSGi Bundles.
+Bundles allow us to inspect the list of OSGi bundles to have access to the detailed information.
+
+System - Email Server
+The Nexus may send out messages for a number of reasons like the trigger in the build.
+For the successful delivery of messages, we need to configure the connection to the SMTP server.
+
+System - Nodes and Base URL
+Nodes
+The Nodes screen summarizes all active nodes.
+
+Base URL
+The Base URL helps the users in accessing the user interface.
+
+Support
+Ensures the server is configured correctly.
+Provides tools to investigate configuration details.
+Useful for troubleshooting.
+Features of Support
+Analytics
+Logging and Log Viewer
+Metrics
+Support ZIP
+System Information
+
+Security
+Security is designed around the following concepts.
+
+Privileges: Rights to read, write and execute
+Roles: Privileges, when grouped into collections, is called roles.
+Users: Users can be assigned one or more roles.
+LDAP: They authenticate by Lightweight Directory Access Protocol via the external system which has the support
+Realms
+
+IQ Server
+They help in configuring the connection of Nexus Repository Manager to Nexus IQ Server.

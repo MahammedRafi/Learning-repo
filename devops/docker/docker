@@ -1,0 +1,85 @@
+vagrant up
+cat /etc/*os*rel*
+
+install docker:
+->download utils for specific operating system : yum install -y yum-utils
+->configuring locatin to download image files ->yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+->install docker image : yum -y  install docker-ce
+->starting the docker daemon : service start docker or systemctl start docker (to check status - use systemctl status docker or ps -ef|grep docker
+->Ensuirng docker ready : docker info
+->create docker : docker run --name <container_name>-it <image> <entry-point>//-t flag represent connect container to host and -i flag for interactive mode
+eg: docker run -i -t ubuntu//bin/bash
+->exit for container : exit
+ ->To know enviornment of script : echo $shell
+ 
+->Go back to created container
+ * docker start <container_name/container_Id>
+ * docker attach <container_name/container_id>
+->daemonized container
+ * docker run -d ubuntu <cmd>
+ 
+ eg: docker run --name adam_new -d ubuntu /bin/sh -c "while true; do echo hello world; sleep 1; done"
+ 
+->docker ps [-a,-q]
+->execute command with out attaching to connected docker
+eg: docker exec <container_id> <cmd>
+->to get stats of docker container
+syntax:docker stats <containerId>
+install apache in docker
+apt-get update or apt-get install -y apache2
+
+->to get events of docker
+syntax : docker events
+spectific event : docker events --filter event=attach --filter event=die
+event from past 1 hr : docker events --since '1h'
+->mapping port of container to host port
+syntax: docker run -p <hostport>:<containerport> nginx:latest
+eg: docker run -p 80:80 nginx:latest
+
+->create data volume (directory) inside container to share data between two/more container
+docker run -it -v <volume path> --name <containername> <imagename> <cmd>
+eg: docker run -it --name volcontaienr -v /usr/data ubuntu
+->transfer data from one container to another container
+docker run --privileged=true -it -volumes-from <containerId> <image>
+->map volume data from host to container
+syntax:docker run -it -v <hostvolpath>:<containervolpath> --name <contianername> <imagename> <cmd>
+->docker rename container name
+syntax:docker rename <src> <dest>
+
+->show current available images:
+syntax:docker images
+
+->search for images:
+docker search ubuntu
+
+->download images
+syntax:docker pull <imagename>
+eg: docker pull debian:jessie
+
+->docker images creation
+ *create container
+ *create image: docker commit <containerId>
+ *give tag : docker tag <imageId> <tagName>
+ 
+->building docker images:
+create test dir & a dockerfile
+vim dockerfile
+FROM ubuntu 
+RUN apt-get install vim
+*build the image
+docker build -t myFirstImage .
+
+*running the built image
+docker run -it myFirstImage
+
+docker file commands:
+*RUN
+*CMD
+*ENTRYPOINT
+*WORKDIR
+*-w <directory> default work directly while creating container
+*ENV
+*USER
+*VOLUME 
+*List all the layers composing an image
+docker history myFirstImage 

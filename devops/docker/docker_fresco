@@ -1,0 +1,1012 @@
+Docker Components
+Docker components include
+
+Docker daemon : Docker process responsible for managing docker objects
+
+Docker client : Communicates with Docker daemon through API calls
+
+Docker Image - Read only template that stores the application and environment.
+
+Docker Container - Runtime instance of a docker image
+
+Docker File - Automates Image construction
+
+Docker registry - Public and private repositories to store images
+
+
+Docker End-to-End Workflow
+Let us quickly look into the steps involved in the docker flow.
+
+Create a Dockerfile
+
+Build a Docker Image
+
+Verify Image
+
+Push to Registry
+
+Pull from Registry
+
+Run Image
+
+Verify running Container/Service
+
+
+The concept of networking in Docker comes into picture when working with Docker in a real time scenario at a large scale.
+
+Docker Networking helps us to share data across various containers.
+
+Host and containers in Docker are tied with 1:N relationship, which means one host can command multiple containers.
+
+
+
+Docker Components
+Docker components include
+
+Docker daemon
+
+Docker client
+
+Docker Objects
+
+Images
+
+Containers / Services
+
+Network
+
+Volumes
+
+Docker Registry
+
+Docker Network
+The concept of networking in Docker comes into account when working with Docker in a real time scenario at a large scale.
+
+Docker Networking helps us to share data across various containers.
+
+Host and containers in Docker are tied with 1:N relationship, which means one host can command multiple containers.
+
+Modes of Networking
+
+Various modes for networking is all about how we manage connections between containers.
+
+Bridge mode Networking
+
+Host Mode Networking
+
+Container Mode Networking
+
+No Networking
+
+Docker Magnets fresco:
+This block diagram represents the Container networking model.
+
+Containers are interconnected to each other through a network established by connecting the ethernet port of the individual containers to the host system.
+
+Every host system has a network infrastructure built in with a network driver and IPAM driver.
+
+Network driver - Device that enables network communication.
+
+IPAM Driver - Provides IP address management serives.
+
+CNM core components include
+
+Sandbox
+
+Endpoint
+
+Network
+
+CNM - Components
+Sandbox
+Includes container's network stack configuration
+
+Manages container's interfaces, routing table and DNS settings
+
+Includes multiple endpoints from multiple networks
+
+Endpoint
+Connects Sandbox to Network
+
+Abstracts Network connection from the application
+
+Provides portability to connect to different Network drivers
+
+Network
+Collection of endpoints that can be connected to each other
+
+Implementation can be a Linux bridge, VLAN etc.
+
+Behind the screens
+Docker Networking
+Every regular host machine (laptops/ Vm / Cloud machine) has an ethernet interface with an IP attached (eg. ip address 10.0.1.1).
+Once you install docker , within the host machine, Docker creates a bridge.
+Docker installs scripts that are clever enough to interpret the networking on the host and identify a space for its ip configuration.
+When you start a container, it creates a virtual bridge called docker01.
+Default inet address for Docker 172.17.42.1.
+
+Docker Native Network Drivers
+Docker engine had in-built network drivers which are the core component that enables networking in containers.
+
+Below are the different types of network drivers that can be used to configure networking in docker.
+
+Host: Uses host's networking stack.
+Bridge: Creates a Linux Bridge on the host which is managed by Docker.
+Overlay: Creates an overlay network for multi-host networks.
+MACVLAN: Uses MACVLAN brige to connect container interfaces with parent host interface.
+None: Container has its own networking stack and completely isolated from the host network.
+Network Modes
+Various modes for networking is all about how we manage connections between containers using the ?network drivers.
+
+Bridge mode Networking: The default network will be bridge network.
+Unless we specify the network option in docker run command, Docker daemon connects the container to this network.
+
+Host Mode Networking: Add the container to the network stack of the host. Container in this mode will not create a new network configuration, where as share the network config of host.
+--net = host
+
+Container Mode Networking: New container created will have the same config as that of the specified Container.
+--net=container:$comtainer2
+
+No Networking: Adds container to container network stack. Hence this lacks connectivity with the host.
+--net=none
+
+inspect bridge details:
+docker network inspect bridge
+
+Disconnect from the bridge network
+
+docker network disconnect bridge container1
+
+User Defined Network
+Users can create 2 kinds of network
+
+Bridge network
+
+Overlay network
+
+Docker command to create a Bridge network
+
+
+docker network create <<network name>> 
+
+e.g. docker network create  myNetwork
+
+Create a User Defined Network
+Lets create our new bridge network and learn how to connect containers to the network.
+
+Step 1:
+
+
+docker network create -d bridge new_bridge
+
+-d --> to specify the driver type (in this case its is bridge network)
+
+Step 2:
+
+Verify if the new network is created
+
+
+docker network ls
+
+This command will list the new bridge along with the other default bridges.
+
+Run the below command to inspect the new network created.
+
+
+docker network inspect new_bridge
+
+Create a User Defined Network (Contd 1...)
+Step 3:
+
+Add container to the network
+
+Lets create a new container using image training/postgres to run a PostgreSQL db and tag this to the new network created.
+
+
+docker run -d --net=new_bridge --name db training/postgres
+
+Step 4: Verify if its connected to the new network.
+
+Run the below command to get the network details on where this container is connected.
+
+
+docker inspect --format='{{json .NetworkSettings.Networks}}'  db
+
+Create a User Defined Network (Contd 2...)
+Step 5:
+
+Lets run the python web app using image training/webapp without specifying any network settings.
+
+This connects the container to the default bridge network.
+
+
+docker run -d --name web training/webapp python app.py
+
+Step 6:
+
+Verify if the web app container is connected to the default bridge network.
+
+
+docker inspect --format='{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' web
+
+Step 7:
+
+Check Connectivity between containers.
+
+Lets try to ping the web app container from the db container using the below command.
+
+
+docker exec -it db bash
+
+Now lets enter the ping command in the db running container.
+
+
+ping 172.17.0.2
+
+Note: ip address should be as that of the web app container. Refer to Step 6 to get the ip address.
+
+Press CTRL-C to end this ping and you will find that the ping command failed. This is because the web app and the db container is not connected to the same network.
+
+Step 8:
+
+Connect web container to new_bridge.
+
+You can open an additional terminal in Katacoda playground. Let's execute the below commands in this new terminal.
+
+Let's now connect web container new_bridge network.
+
+
+docker network connect new_bridge web
+
+Step 9:
+
+Repeat Step 7 commands to ping web container from db container. Get the ipaddress by running below command again. This time you will find 2 ipaddress, the second one is for the connectivity with the new_bridge.
+
+
+docker inspect --format='{{json .NetworkSettings.Networks.new_bridge}}'  web
+
+This ping command is successful now since we have established connectivity between 2 containers.
+
+Network Commands (Contd 2...)
+Remove network
+Command to remove unused network
+
+docker network rm <<network name>>
+e.g. docker network rm Mynetwork
+
+Multi-Host Networking
+Docker Engine provides out-of-the-box support to multi-host networking using overlay network driver.
+
+A bridge network is used when we run a relatively small network on a single host.
+
+An overlay network is used when we have a significantly larger network involving multiple host.
+
+Overlay Network
+There are 2 ways of creating an overlay network.
+
+Overlay networking with an external key-value store
+
+Overlay networking in swarm mode
+
+Overlay networking with an external key-value store
+We need a valid key-value store service to create a Overlay network.
+
+Before creating a network in this way, you must install and configure your chosen key-value store service.
+
+Pre-requisites:
+
+A key-value store (Docker supports Consul, Etcd, and ZooKeeper)
+
+A cluster of hosts that connects to key-value store
+
+Host with Docker Engine configured properly
+
+Host within cluster must have a unique hostname because key-value store uses host name to identify cluster members
+
+Overlay networks in swarm mode
+What is Swarm?
+
+A swarm is a cluster of Docker engines, or nodes, where you deploy services.
+
+The cluster management and orchestration features embedded in the Docker Engine are built using SwarmKit.
+
+Docker engines participating in a cluster are running in swarm mode.
+
+Source: docker.com
+
+You can initialize a swarm or join an already existing swarm.
+Overlay Network in Swarm Mode
+The swarm nodes exchange overlay network information using a gossip protocol.
+
+By default the nodes encrypt and authenticate information they exchange via gossip using the AES algorithm in GCM mode.
+
+Manager nodes in the swarm rotate the key used to encrypt gossip data every 12 hours.
+
+How Images are stored ?
+Lets assume that we pull nginx image using docker pull command as below.
+
+
+docker pull nginx
+
+Docker will download this image from the docker hub to host directory which is managed by docker engine running in the host machine.
+
+Container - Data Architecture
+
+Docker Images have a series of in-build layers within. All the subsequent layers except for the last one is read- only.
+
+When we create a container from the image built, a new layer which is writable is added on top. This is called container layer.
+
+Changes done on the running container gets stored in the thin writable layer.
+
+Containers - Data Storage
+The underlying image layer is shared between containers whereas the thin writable layer is separate for every individual containers.
+Storage Driver (Contd...)
+Lets run the following command in Katacoda Docker playground to view the Storage driver used.
+
+Storage Drivers
+
+Storage drivers manage the contents of the image layers as well as the thin writable container layer.
+
+Storage drivers supported for Ubuntu systems are
+
+aufs
+
+devicemapper
+
+overlay2
+
+overlay
+
+zfs
+docker info
+
+Lets consider only the below set of information in the terminal output to understand the current storage driver configured.
+
+
+
+
+Server Version: 1.13.1
+
+Storage Driver: overlay
+
+Backing Filesystem: extfs
+
+Modify Storage Driver
+Current Storage driver configured can be modified as below.
+
+Step:1
+
+Stop the docker service.
+
+
+service docker stop
+
+Step 2:
+
+In a Ubuntu machine, add the following to daemon.json file in /etc/docker/ directory to modify the driver to 'devicemapper'
+
+
+{
+
+  "storage-driver": "devicemapper"
+
+}
+
+If you do not find this file, please go ahead and add it.
+Modify Storage Driver (Contd...)
+Step 3:
+
+Once you add it, restart docker service using command
+
+
+service docker start
+
+Note:
+
+This cannot be tried out in Katacoda playground since this requires a root access.
+
+Step 4:
+
+You can verify using command
+
+
+docker info
+
+Docker Volumes
+
+Docker Volumes are directories that store data outside of the container’s filesystem in the host machine.
+
+Data stored on Volumes are reusable and are shareable even when the container is stopped.
+
+Data in the volumes can be reused by the same service on redeployment, or shared with other services.
+
+In Docker Cloud, you can define one or more data volumes for a service.
+
+Containers directly read and write data on to the volumes.
+
+Storage drivers do not have any control on the data volumes.
+
+Docker Volumes - Commands
+Add a Data Volume:
+
+
+docker run -d -P --name web -v /webapp training/webapp python app.py
+
+Note: You can add one or more volumes to a single container
+
+Locate a volume:
+
+
+docker inspect web
+
+
+ "Mounts": [
+
+            {
+
+                "Type": "volume",
+
+                "Name": "dbfa40d8080a2e467c91567109ce124683747afcf1511562f77d6dd006733f4f",
+
+                "Source": "/var/lib/docker/volumes/dbfa40d8080a2e467c91567109ce124683747afcf1
+
+511562f77d6dd006733f4f/_data",
+
+                "Destination": "/webapp",
+
+                "Driver": "local",
+
+                "Mode": "",
+
+                "RW": true,
+
+                "Propagation": ""
+
+            }
+
+        ],
+
+Mounts section of the output trace displays the source and destination as well as Read/write mode if enabled or not.
+
+Data Volumes - Commands
+Create a Volume:
+
+
+docker volume create --name new_volume
+
+Display detailed information on Volumes:
+
+
+docker volume inspect new_volume
+
+List volumes:
+
+
+docker volume ls
+
+Remove unused volumes
+
+
+docker volume prune
+
+This will remove 'new_volume'.
+
+Remove one or more volumes
+
+
+docker volume create --name new_volume1
+
+docker volume rm new_volume1
+
+Backup/ Restore/ Migrate Data Volumes
+Command to Back up Volumes:
+
+
+docker run --rm --volumes-from dbstore -v $(pwd):/backup ubuntu tar cvf /backup/backup.tar /dbdata
+
+Command to Restore Volumes:
+
+Create new container
+
+
+docker run -v /dbdata --name dbstore2 ubuntu /bin/bash
+
+docker run --rm --volumes-from dbstore2 -v $(pwd):/backup ubuntu bash -c "cd /dbdata && tar xvf /backup/backup.tar --strip 1"
+
+Docker Compose
+
+Docker Compose is a tool used to define and run applications containing multiple containers.
+
+Why docker Compose?
+
+When an application is built to have many services/containers , its difficult to manage them separately. Every container will have its own dockerfile and to bring it up individual run commands are to be executed. Whereas with Docker compose, we can bring all services up with a single command.
+
+Docker Inspect
+
+This docker command is used to display low-level information on docker objects such as Images, Containers, volume, network, node, service, and task.
+
+These objects can be identified by either object name or ID.
+
+The default output will be a JSON array.
+
+Docker Inspect - Syntax
+
+docker inspect [--help] [-f|--format[=FORMAT]] [-s|--size] [--type] NAME|ID [NAME|ID...]
+
+--help: prints usage statement
+
+-f, --format="" :Format the output using the given Go template
+
+-s, --size : Display total file sizes if the type is container
+
+--type: container|image|network|node|service|task|volume
+
+Return JSON for specified type, permissible values are "image", "container",
+
+"network", "node", "service", "task", and "volume"
+
+Docker Inspect - Example
+Let's pull an image from docker hub and run Inspect command.
+
+
+docker pull tomcat
+
+Docker inspect command to display the information on the Image.
+
+
+docker inspect tomcat
+
+When there is a name conflict with the image name and the corresponding container name lets add the type option and specify the object as image or container.
+
+
+docker inspect --type=image tomcat
+
+Display Container Information
+We already have a Tomcat image pulled from docker hub. Let's run the same Image as below.
+
+
+docker run -d --name tomcatContainer tomcat
+
+Let's now run docker inspect command on the new container created.
+
+
+docker inspect tomcatContainer
+
+Display Size information on a container
+
+docker inspect -s tomcatContainer
+
+Highlighted below the size section of the output.
+
+
+        "SizeRw": 37433,
+
+        "SizeRootFs": 292398179
+
+	 Docker Security
+
+Creating services using docker is gaining traction when compared to the virtual machine set up.
+
+To use services effectively and securely, We need to be aware of potential threats and security issues to docker.
+
+Security threats to Docker Container
+
+Let's look into few of the security issues.
+
+Risk of privilege escalation via containers.
+For example, if an attacker gets inside a containerized app, it becomes easy to gain root access to the host system.
+
+A potential attack on one container can compromise data or resources used by a different container. This can happen even without root access.
+Simple DoS attacks where one container gets all available system resources which stop other containers from functioning properly.
+Pulling insecure or invalidated images from the public reposit
+
+Container Isolation - Kernal Namespaces
+
+LXC containers are similar to Docker Containers and hence the security features remain similar.
+
+Docker creates a namespace and control groups for the container when it is started.
+
+Namespace provide a isolation between containers running on the same host machine.
+
+Every container owns an individual network stack. Containers interact with rest others as if they interact with external hosts. Every container is like a physical machine connected to rest through a common Ethernet switch.
+
+Container Based DoS Attacks - Control Groups
+
+Control groups are responsible for accounting and limiting of resources.
+
+They ensure that all containers receive fair share of available resources (CPU, memory and disk space)
+
+Prevent Container based Dos attacks (Denial of Service). i.e. it ensures that one container cannot exhaust all the resources available which might bring the whole system down.
+
+Docker Daemon Attack
+Only trusted users should be given access to control the docker daemon since this user will have root privilege to the host system to run docker daemon.
+
+Also, Docker gives the flexibility to share files/ directories between the host system and the container.
+
+By this way, a running container can directly access the host directory and modify the files.
+
+Docker Daemon Attack (Contd...)
+Parameter checking is very important when we use the web server to provision containers since malicious users can easily create arbitrary containers.
+
+Rest API endpoint was modified to use UNIX socket instead of TCP socket since the TCP sockets are prone to cross site forgery attacks.
+
+When we expose the REST API over HTTP, we should ensure that we have enough security using client stunnel, SSL certificates, HTTPS and certificates.
+
+Securing Images
+
+Poisoned images cause a serious problem since the attacker can take control over the complete host system as well as the data.
+
+With Docker 1.3.2, images are extracted in chrooted subprocess. This is a major step towards privilege separation.
+
+With Docker 1.10.0, cryptographic checksums of their Image contents are used to store and access them. This prevents the attacker from colliding with the existing images.
+
+Linux Kernal Capabilities
+Bunch of processes listed below needs root access on Linux system to run. But the infrastructure around the container takes care of almost all of these tasks.
+
+SSH
+
+Cron
+
+Log Management
+
+Hardware Management
+
+Network Management
+
+Containers do not need root privileges in most of the cases. Hence containers will have a limited root privilege rather than the complete root access.
+
+Linux Kernal Capabilities
+Docker follows a whitelist approach by allowing only the capabilities listed.
+
+Docker also supports addition and removal of capabilities. With the reduction in capabilities, docker becomes more secure and with the addition of capabilities, it becomes less secure.
+
+The complete list of capabilities is? listed here.
+
+http://man7.org/linux/man-pages/man7/capabilities.7.html
+
+Docker Features - User Namespace
+With Docker 1.10, User Namespaces are supported by the Docker daemon.
+
+User Namespaces allows users to work on daemon commands on containers with root access but without root privilege on the host.
+
+The container root user is mapped to another non uid-0 outside the container. This will reduce the risk of Container breakout.
+
+Why User Namespace?
+Let consider the below example.
+
+User 100 in container 1 is mapped to User 501 outside the container.
+
+User 150 in container 2 is mapped to User 502 outside the container.
+
+This is something similar to network port mapping. This mapping is done to enable the administrator to set privilege to the users. Admin can set uid 0 (root) to a user inside container 1 without giving root access to the host system.
+
+Secure Docker
+To summarize,
+
+Add -u flag to Docker run command while starting a container to run as a normal user instead of root user
+
+Remove SUID flags from container images to make privilege escalation attack harder
+
+Add Docker Control groups and configure them to set limits on resource usage for a container
+
+Add user namespace in Docker to create an isolation between the containers as well as the container and the host
+
+Secure Docker (Contd...)
+Use only trusted images or images from official source from Docker repository
+
+Use software for static analysis of vulnerabilities in application containers e.g.Clair
+
+Apart from the capabilities, leverage systems like TOMOYO, AppArmor, SELinux, GRSEC, etc. with docker
+Other Security features
+Apart from the capabilities, systems like TOMOYO, AppArmor, SELinux, GRSEC, etc. can be leveraged with docker.
+
+Running a kernel with GRSEC and PAX, will add more security at both compile and run time.
+
+Security model templates that work with docker can be used.
+
+For e.g. AppArmor and Red Hat offers SELinux policies for Docker. These provide additional security on top of capabilities.
+
+Users can themselves define policies with their access control mechanism.
+
+
+Docker swarm:
+
+Cluster Management
+Before we get into Docker Swarm in detail, let us understand some basic concepts of cluster.
+
+Cluster Management is a technique to manage one or more cluster nodes. This is done using Cluster manager and agent.
+
+Cluster Manager is nothing but a GUI or CLI software.
+
+Clustering Tool
+Clustering tool is a software that manages a set of resources through a single point of command. In our case, these set of resources are nothing but containers.
+
+For e.g,
+
+Workload distribution management across a distributed system/ cluster is very tedious for the large enterprise systems. Clustering tool comes as a rescue by automating this task.
+
+The instructor will just specify the details such as cluster size, settings, and some advanced features. Rest everything is taken care by the clustering tool.
+
+Docker Swarm is one such example of a clustering tool for Containers.
+
+Why Container Orchestration System?
+Container management becomes very tough, in case of a large scale distributed system which involves hundreds of containers.
+
+Few of the key activities are,
+
+Scaling number of containers based on the peak load
+Perform rolling updates for containers
+Perform health check on containers
+Docker Swarm - Evolution
+
+In the early 2014, Docker came up with a cluster management system with a communication protocol known as Beam.
+
+Later with Docker API, they introduced as daemon to communicate with a distributed system. This was named as libswarm. The daemon is called Swarmd.
+
+In November 2014, Docker team retained the concept of cluster communication with additional Remote APIs and named this as Swarm. This first generation is called Swarm v1.
+
+Docker Swarm - Evolution (Contd...)
+In February 2016, Swarm v1 system was completely redesigned to overcome the limitations of Swarm v1 and named as Swarm v2.
+
+In June 2016, SwarmKit came into limelight which is an orchestration toolkit within Docker Engine for distributed service. This version is also known as "Swarm mode".
+
+
+
+Docker Swarm - Introduction
+
+Docker Swarm is a Cluster Management and orchestration tool which is available inbuilt in Docker engine.
+
+A swarm is a cluster of docker engines, or nodes, where you deploy services.
+
+You can build this using Swarm kit (A toolkit to orchestrate system).
+
+Swarm mode can be enabled by either initializing a swarm or joining an existing swarm.
+
+Swarm - Benefits
+Swarm does not require any additional installation. This comes as an in-built feature in Docker itself.
+With the decentralised service discovery, Swarm v2 supports clusters with multi thousand nodes.
+Swarm mode works out-of-the-box. You need no changes to the existing container system to adept to this tool.
+Easy to use tool with few simple commands
+
+
+Decentralized design
+1
+You can manage the nodes in the Swarm cluster through Swarm commands. This gives a single point of access to build the entire Swarm.
+
+Scaling
+2
+You can specify the number of tasks for every service. This is automatically done through commands to scale the service.
+
+Desired state reconciliation
+3
+The Swarm manager keeps track of the the cluster state so that the actual and the desired state is always the same.
+Multi-host networking
+4
+When you specify an overlay network to connect your services, the swarm manager assigns addresses to the containers on the overlay network once you create/update the containers.
+
+Service discovery
+5
+Swarm manager nodes allocates a unique DNS name for the services. You will be able to find containers in the swarm via the DNS server embedded in the swarm.
+Load balancing
+6
+Swarm Kit has an internal load balancer which distributes the service containers within nodes. You can also include an external load balancer as well.
+Secure by default
+7
+Swarm nodes include TLS mutual authentication and encryption to secure all communications. You can either use a self-signed root certificates or certificates from a custom root CA.
+Rolling updates
+8
+Service updates can be done incrementally. Swarm manager lets you specify a time delay between every update without any downtime.
+
+Swarm - Key Concepts
+Before we dive into the Swarm Architecture, let's look into some of the key concepts in Docker Swarm.
+
+Docker Node
+Docker Service
+Docker Tasks
+Docker Node
+Docker Node is a Docker Engine instance that is included in the Docker Swarm.
+
+In Real time, these docker nodes are distributed across multiple cloud as well as physical machines.
+
+There are 2 kinds of Docker nodes.
+
+Manager Node
+Worker Node 
+
+Docker Node (Contd...)
+Manager Node:
+
+Manager Node is responsible for all Orchestration and container management activities required to keep up the desired system state.
+
+Worker Node:
+
+Worker node executes the tasks assigned by Manager node.
+Drain Node
+You can set the availability of any node to Drain, if you do not want to execute any task on the node.
+
+Suppose you do not want manager node to process any task, you can set this as Drain node. The scheduler gracefully terminates any more task allocation and moves the node to Drain mode.
+
+Docker Service
+Docker Service:
+
+Service is nothing but a task definition that has to be executed.
+
+You will have to create a service specifying the image name and other additional parameters.
+
+In most cases, service is a image for a microservice of some large application.
+
+Few Examples: HTTP server or a database, any kind of executable program that you would run in a distributed system.
+
+Docker Swarm - Architecture (Contd 1..)
+Node is the Key member of a Docker Swarm.
+
+A Swarm can have more than one Manager Node. In this case, they elect their leader using Raft algorithm to conduct the Orchestration tasks.
+
+Manager nodes are also worker nodes. But you can configure them as Manager only nodes thereby restricting them from working on any tasks.
+
+Docker Swarm - Architecture (Contd 2...)
+Docker Swarm API is one another key component of the Docker Swarm architecture.
+
+Swarm has a list of remote APIs similar to Docker. This enables all kinds of Docker clients to connect to Swarm. In addition, Swarm API provides the cluster information as well.
+
+Docker API info is restricted to one single docker engine whereas Docker Swarm API provides the info on the cluster of engines, no. of nodes available in a cluster, and node details.
+Raft Consensus
+
+Manager nodes use the Raft Consensus Algorithm to internally manage the cluster state.
+
+This is to ensure that all manager nodes that are scheduling and controlling tasks in the cluster maintain/store consistent state.
+
+Raft Consensus - In detail
+In case of any failure on the leader manager node, any of the available manager node should be able to easily pick it up and assign tasks maintaining a stable state.
+
+This algorithm can tolerate up to (N-1)/2 failures. Also it requires a majority or quorum of (N/2)+1 members to agree on values proposed to the cluster.
+
+Raft Consensus - In Detail (Contd..)
+Assume there is a cluster of 5 Managers running. If 3 upon 5 nodes fail, the system will stop scheduling any more tasks. This can tolerate a maximum loss of one manager.
+
+The existing tasks will continue to run but the scheduler will not be able to re balance tasks and cope with any failures.
+
+Docker recommendations:
+
+Have more than one Master node as well as odd number of Master nodes for High Availability.
+Have maximum of seven manager nodes for a Swarm.
+
+Consider an example shown in the picture. The diagram shows 3 replicas of redis server running in 3 containers. You want to load balance between three instances of an redis server.
+
+Each of the three instances is a task in the swarm.
+
+The container is an isolated process.
+
+In this model, each task invokes one container. You can assume a task to be a slot where the scheduler places a container. The scheduler identified the task to be in a running state when the container comes up.
+
+Tasks automatically terminate, when there is a failure in the container.Swarm Tasks - States
+Here are the list of states that a task progresses through.
+
+NEW : Task is initialized.
+
+PENDING : Resources for the task are allocated.
+
+ASSIGNED : Swarm assigned the task to nodes.
+
+ACCEPTED : The task was accepted by a worker node. If a worker node rejects the task, the state changes to REJECTED.
+
+PREPARING : Docker is preparing the task.
+
+STARTING : Docker is starting the task.
+
+RUNNING : The task is executing.
+
+COMPLETE : The task exited without an error code.
+
+FAILED : The task exited with an error code.
+
+SHUTDOWN : Docker requested the task to shut down.
+
+REJECTED : The worker node rejected the task.
+
+ORPHANED : The node was down for too long.
+
+Scheduling Tasks - Workflow
+When you create a service, orchestrator realises the desired state by scheduling tasks.
+Every task is uni- directional and progresses through a series of states.
+The Scheduler instructs the worker nodes to run the task
+An executor in the worker node executes the task on be-half of the worker node.
+
+
+Swarm Workflow (End-to-End)
+To summarize, here is the complete workflow.
+
+Step 1: Create a service by using docker service create or the UCP web UI or CLI.
+
+Step 2: The request goes to a Docker manager node.
+
+Step 3: The Docker manager node schedules the service to run on particular nodes.
+
+Step 4: Each service can start multiple tasks.
+
+Step 5: Each task has a life cycle, with states like NEW, PENDING, and COMPLETE.
+
+Step 6: Tasks are execution units that run once to completion. When a task stops, it isn’t executed again, but a new task may take its place.
+
+Replicated and Global Services
+There are two types of service deployments.
+
+Replicated
+Global
+Replicated and Global Services
+Replicated Service:
+
+In this type, you will specify the number of replicas (identical tasks) that you would run as tasks on the containers.
+
+Global Service:
+
+This service runs one task per worker node. You need not specify any number of replicas. Swarm automatically adds or removes tasks based on the total number of active nodes at a given time.
+
+Few examples are monitoring agents and anti-virus scanners.
+
+Initialize the Swarm
+Let us now get acquainted with Docker Swarm commands.
+
+To initialize swarm,
+
+docker swarm init ?
+Note:
+
+You can configure the manager node to publish its address as a Manager with the mentioned ip address as below.
+
+docker swarm init --advertise-addr <ip-address>
+Eg:
+[root@ITTServer vagrant]# docker swarm init --advertise-addr 10.10.10.21
+Swarm initialized: current node (6dzqoylzu0f98spn67vevlrfl) is now a manager.
+
+To add a worker to this swarm, run the following command:
+
+    docker swarm join --token SWMTKN-1-5d4nenpf2f77ovjd5kn1gkai84awo654c3p2dup77m51p2556e-3t91dqtxl4bxujw287zfeatkz 10.10.10.21:2377
+
+To add a manager to this swarm, run 'docker swarm join-token manager' and follow the instructions.
+
+Deploy a Service with Constraints
+You can add your own constraints while deploying a service. This will ensure that the service will get scheduled as a task only when the constraint is met. This constraint is known as placement.
+
+Let us consider an example where you add a constraint to deploy a service only on node where there is SSD storage.
+
+Syntax: docker service create --name testService --replicas 2 --constraint node.labels.disk==ssd tomcat
+
+Service Discovery
+
+Service discovery is a technique that Docker uses to transfer the request that comes from external clients to separate nodes to execute it without exposing any node details.
+
+For example, if you have an event service which saves data using MySQL service (both services are connected through overlay network). You will have to expose the port details of your event service to the client. MySQL service port details are required to be shared with the event service alone.
+
+Service Discovery - How it works
+Docker assigns a virtual IP (VIP) to the service by default when you create a service. This IP will be used by clients to reach out to the service.
+
+Docker has the worker nodes list for every service to route request between nodes.
+
+Routing Mesh in Docker Swarm enables multi-host networking. This enables containers on various hosts to talk to each other as if they are on the same host.
+
+This is carried out by creating a Virtual Extensible LAN (VXLAN), which is designed for cloud-based networking.
+
+Docker Swarm internally has an ingress load balancer to distribute the traffic to containers that are directly exposed to public.
+
+You can also configure external load balancer to direct the request to appropriate containers irrespective of whichever host runs the service
+
+Network Traffic in Swarm Mode
+A Docker swarm generates two different kinds of traffic
+
+Control and management plane traffic:
+
+This traffic includes all Swarm management communication like Swarm command to join/leave swarm. This communication is encrypted.
+
+Application data plane traffic:
+
+This includes all communication from external clients to container and communication between containers.
+
+Communications between docker daemons participating in swarm mode happens through overlay network.
+
+Overlay network for Swarm mode is similar to user defined network bridge network within containers.
+
+
+This network is available by default when the Swarm mode is initialized. This bridge network connects hosts ports to container ports that are connected to overlay network.
+
+This is also a kind of overlay network which enables load balancing among nodes. This network is available by default when you initialize or join a swarm.

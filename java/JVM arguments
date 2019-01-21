@@ -1,0 +1,18 @@
+-XX:+UseSerialGC -Xms10m -Xmx10m -XX:NewSize=1m -XX:MaxNewSize=1m -XX:NewRatio=3 -XX:SurvivorRatio=10 -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -XX:+PrintGCDateStamps -XX:+UseGCLogFileRotation -XX:NumberOfGCLogFiles=5 -XX:GCLogFileSize=1m -Xloggc:E:/gitrepo/Learning-repo/java/gc.log -XX:+PrintTenuringDistribution -XX:+HeapDumpOnOutOfMemoryError -XX:HeapDumpPath=E:/gitrepo/Learning-repo/java/heap_dump.hprof
+
+
+-XX:+UseGCLogFileRotation 
+-XX:NumberOfGCLogFiles=< number of log files > 
+-XX:GCLogFileSize=< file size >[ unit ]
+-Xloggc:/path/to/gc.log
+
+-XX:+HeapDumpOnOutOfMemoryError 
+-XX:HeapDumpPath=./java_pid<pid>.hprof
+-XX:OnOutOfMemoryError="< cmd args >;< cmd args >" 
+-XX:+UseGCOverheadLimit
+
+-XX:NewSize=1m 
+-XX:MaxNewSize=1m
+
+
+jps -lv give running processes in windows

@@ -1,0 +1,77 @@
+JIRA is a popular project management and a software testing tool used by several testing, development, and technical support teams to complete a great deal of work quicker. Atlassian Inc., an Australian company, developed JIRA.
+
+JIRA is a commercial, multilingual and a platform-independent tool.
+
+It supports Oracle, SQL, MySQL and PostgreSQL servers in the backend.
+
+It is integrated with Hipchat, Bitbucket, Bamboo, Zephyr and other developing and testing tools.
+
+JIRA is used in
+
+Tracking issues, bugs, and change requests.
+
+Support, help desk, and customer services for creating tickets, tracking the resolution and status of the tickets.
+
+Task tracking, project management, and requirement management.
+
+Workflow and process management.
+
+Who Uses JIRA in a Project?
+JIRA is used by many. Following are the professionals who use JIRA.
+
+Scrum Masters manage their projects and understand their team capacity.
+Developers log issues, resolve issues and create stories.
+Testers log issues and verify the issue resolutions.
+Program managers understand how effectively the issues are resolving by looking at the reports.
+Product users log bugs and feature requests.
+
+The core features of JIRA are mentioned below.
+
+Boards
+
+Boards provide an immediate snapshot of the project to the team. JIRA provides Scrum and Kanban boards.
+Power Search
+
+JIRA provides a powerful search functionality with basic quick and advanced features.
+JIRA supports the filter (saved search) options using JQL.
+Reports
+
+JIRA supports many reports to track progress specific timeframe, deadlines, individual’s contribution, etc.
+
+Features of JIRA
+Add-Ins
+
+More than 100 add-ins are supported in JIRA to connect with different software to make work easy.
+REST API
+
+Interact with the JIRA Server applications remotely.
+Workflow Customization
+
+Provides an option to modify the workflow according to the project requirement.
+Roadmap Planning
+
+Enables the team to set a vision for the product and deliver it on time to the customer.
+
+Advantages of JIRA
+Better visibility
+Better prioritization
+Increased productivity
+Stay connected on the go
+Extensible
+Usability
+
+Tool Integrations
+
+Integrating JIRA with compatible tools helps your team with a wide range of information and functionality related to your work.
+
+Following are some of the tools integrated with JIRA.
+
+Hipchat
+
+It is a chatting platform that allows you to discuss the project instantly, be notified of issue updates and can monitor from anywhere.
+Bamboo
+
+It seamlessly views and monitors the status of bamboo builds and deployment without leaving JIRA application projects.
+Bitbucket
+
+It is a version control repository hosting service that is web-based and used for code review. Bitbucket provides an unlimited number of private repositories.

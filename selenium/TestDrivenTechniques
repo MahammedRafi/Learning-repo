@@ -1,0 +1,175 @@
+Test Design Techniques
+In this topic, we will be looking into some of the designing frameworks as well. We involve these Test designs depend upon the project requirement and needs.
+
+Now let's look into the following techniques.
+
+Cross Browser Testing
+Parameterization
+Page Object Model
+Taking Screenshot
+Data Driven Testing
+
+Parameterization
+Let's create a parameterization for cross browser testing as it will be helpful with upcoming hands-on. So now let's create a "CrossBrowserSuite.xml" file. Then we can write our parameter as below in sample.
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+
+<suite name="Cross Broswer"  parallel="tests">
+
+    <test name="firefox test">
+<parameter name="browser" value="firefox"/>
+	<classes>
+<class name="crossBrowsers.googleLaunch"/>
+	</classes>
+    </test>
+
+   <test name="chrome test">
+<parameter name="browser" value="chrome"/>
+      <classes>
+<class name="crossBrowsers.googleLaunch"/>
+      </classes>
+   </test>
+</suite>
+
+POM Normal Approach
+Normal POM
+It’s a beginner level where things will be simple to understand. So you can easily be related to Page Factory. Now, let’s dive into the scripting path.
+
+We need to create a Java Project within it, and we need to create two Packages.
+
+The first package we will create a class for each Application Page such as Login Page and TestCases.
+
+This Class will consist of all the locators and methods of the Application Page such as Login Page and Home Page.
+
+In the second package, let's create as Test Cases and create a class as the First test.
+
+Page Object Model
+POM is a design pattern where the object information is managed outside the test script. Thus it would be in a readable format which can understand easily. It mainly consists of three layers - (Tests, Pages, utility).
+
+We have come across of POM earlier in Maven that is (Project Object Model) and this is (Page Object Module); don't get confused.
+
+Advantages of POM
+Easy code maintenance
+Make code reusable
+Code became shorter and optimized.
+We can implement POM in two different ways:
+
+Normal POM Approach
+Page Factory Method
+
+Page Factory Method
+Page Factory is another way to initiate the page objects where we will be using a separate method to initialize web element.
+
+This can be used with the help of two different annotations “@FindBy” and “how” and import it from the library.
+
+Anyhow, you use any of the two annotations. Let’s play with the code as same as the previous script.
+
+Page Factory Method
+Let's look into the sample script of Page Factory.
+
+public class PageFactoryLogin {
+
+    WebDriver driver;
+	
+public PageFactoryLogin(WebDriver localdriver){
+		this.driver=localdriver;
+	}
+	
+@FindBy(xpath="//*[@id='pt-login']/a")WebElement loginTab;
+	
+@FindBy(id="wpName1")WebElement username;
+	
+@FindBy(how=How.ID,using="wpPassword1")WebElement password;
+	
+@FindBy(how=How.XPATH,using="//*[@id='wpLoginAttempt']")WebElement logIn;
+	
+Note: This annotation will only work with Page Factory.
+
+
+Taking ScreenShot
+The screenshot helps to check the functionality, debug and find out the issue, and identify once the test cases fail.
+
+Steps to take the screenshot
+It helps to convert web driver object to TakeScreenshot.
+TakesScreenshot scrShot =((TakesScreenshot)webdriver);
+
+It calls getScreenshotAs method to create an image file.
+File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
+
+Now we are copying file to a desired location.
+FileUtils.copyFile(source, new File("D:/selenium_workspace/error.png")).;
+
+example:
+@Test
+ public void Screenshot() {
+
+// launch browser and URL
+
+WebDriver driver=new FirefoxDriver();
+driver.get("https://apps.fresco.me");
+ 
+// Capture screenshot and store as a file format
+
+File src= ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
+Try{
+
+//Now we are copying the screenshot to the desired location using "copyFile" //method
+
+FileUtils.copyFile(src, newFile("D:/selenium_workspace/error.png"));
+}
+ 
+catch (IOException e)
+ {
+  System.out.println(e.getMessage());
+ 
+ }
+ }
+ 
+ 
+ Data Driven Testing
+Data Driven Testing (DDT) framework helps to deal "Sign Up and forum" pages that deal with huge data.
+
+We will be storing the data in an Excel sheet.
+
+We will use it in our script by importing the data from the excel sheet by each row one by one to execute the scripts.
+
+
+
+DDT - Sample Script
+@BeforeMethod - we have to write the continued browser launch. The script you have a look at the sample in below cards.
+
+@Test - we have to mention data provider and its name. Also, we have to pass a String - "searchName" as shown below.
+
+@Test(dataProvider="testdata")
+public void  googleSearch(String searchName){	
+
+driver.findElement(By.xpath("//*[@id='lst-ib']")).clear();
+driver.findElement(By.xpath("//*[@id='lst-ib']")).sendKeys(searchName);
+driver.findElement(By.xpath("//*[@id='lst-ib']")).sendKeys(Keys.ENTER);
+}
+
+DDT - Sample Script
+@DataProvider- We will give a name as "testdata" and we will call it in @test method. Also, we will create a "ReadExcelFile", which we will look into below card. And here we are providing the local path of the excel sheet.
+
+@DataProvider(name="testdata")
+public Object[][] TestDataFeed(){
+	 
+ReadExcelFile config=new ReadExcelFile("Excel Sheet Path");
+
+int rows = config.getRowCount(0);
+Object[][] SearchName = new Object[rows][2];
+
+DDT - Sample Script
+Here, we have "getRowCount" and value as "0", which we had mentioned that it should read Excel Sheet number 1.
+
+And we are creating Array as "SearchName" to get the data with help of .getData function and you can find its class in "ReadExcelFile.java".
+
+int rows = config.getRowCount(0);
+Object[][] SearchName = new Object[rows][2];
+		
+for(int i=0; i<rows; i++){
+SearchName[i][0] = config.getData(0, i, 0);
+	}
+	return SearchName;	
+}

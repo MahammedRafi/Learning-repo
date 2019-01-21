@@ -1,0 +1,20 @@
+--- # Outline to playbook Translation
+- hosts: demo
+  user: ansible
+  sudo: yes
+  gather_facts: no
+  tasks:
+   - name: date/time stamp for playbooks start
+     raw: /usr/bin/date > /home/ansible/playbook_start.log
+   - name: install the apache web server
+     yum: pkg=httpd state=latest
+     notify: restart the HTTPD
+   - name: install client software - telnet
+     yum: pkg=telnet state=latest
+   - name: log all the packages installed
+     raw: yum list installed > /home/ansible/installed.log
+   - name: date/time stamp for playbook end
+     raw: /usr/bin/date > /home/ansible/playbook_end.log
+  handlers:
+   - name: estart the HTTPD
+     action: service name=httpd state=restarted

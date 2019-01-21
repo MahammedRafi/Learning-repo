@@ -1,0 +1,43 @@
+Thread 0xffe10a30
+
+  locals:
+
+Thread 0xffe10ba8
+
+  locals:
+
+Thread 0xffe10e98
+  at java.lang.Object.wait(J)V (Native Method)
+  at java.lang.ref.ReferenceQueue.remove(J)Ljava/lang/ref/Reference; (Unknown Source)
+  at java.lang.ref.ReferenceQueue.remove()Ljava/lang/ref/Reference; (Unknown Source)
+  at java.lang.ref.Finalizer$FinalizerThread.run()V (Unknown Source)
+
+  locals:
+    objectId=0xffe11028, line=1
+    objectId=0xffe11018, line=1
+    objectId=0xffe11028, line=2
+    objectId=0xffe10e98, line=3
+    objectId=0xffe11048, line=3
+
+Thread 0xffe11058
+  at java.lang.Object.wait(J)V (Native Method)
+  at java.lang.Object.wait()V (Unknown Source)
+  at java.lang.ref.Reference.tryHandlePending(Z)Z (Unknown Source)
+  at java.lang.ref.Reference$ReferenceHandler.run()V (Unknown Source)
+
+  locals:
+    objectId=0xffe1f5f8, line=1
+    objectId=0xffe1f5f8, line=2
+    objectId=0xffe11058, line=3
+
+Thread 0xffe11220
+  at java.lang.OutOfMemoryError.<init>()V (Unknown Source)
+  at java.util.Random.<init>(J)V (Unknown Source)
+  at java.util.Random.<init>()V (Unknown Source)
+  at GCExample.runMethod()V (GCExample.java:12)
+  at GCExample.main([Ljava/lang/String;)V (GCExample.java:7)
+
+  locals:
+    objectId=0xffe111d0, line=3
+    objectId=0xffe111f8, line=4
+

@@ -1,0 +1,28 @@
+React Native lets you build mobile apps using only JavaScript. It uses the same design as React, letting you compose a rich mobile UI from declarative components. With React Native, you don't build a mobile web app, an HTML5 app, or a hybrid app; you build a real mobile app that's indistinguishable from an app built using Objective-C or Java. React Native uses the same fundamental UI building blocks as regular iOS and Android apps. You just put those building blocks together using JavaScript and React.
+
+React Native Advantages
+Follow are the advantages of React Native -
+
+JavaScript - You can use the existing JavaScript knowledge to build native mobile apps.
+
+Code sharing - You can share most of your code on different platforms.
+
+Community - The community around React and React Native is large, and you will be able to find any answer you need.
+
+React Native Limitations
+Native Components - If you want to create native functionality which is not created yet, you will need to write some platform specific code.
+
+Pre requesite:
+NPM, NodeJS, Python, JDK8, Yarn
+
+->install create-react-native-app : npm install -g create-react-native-app
+*It will install expo cli to connect with android device
+*install expo client to simulate the code in android mobile
+->install react-native-cli : npm install -g react-native-cli
+
+create project:
+->create-react-native-app MyReactApp
+->npm start
+
+React UI took kit
+npm install react-native-elements

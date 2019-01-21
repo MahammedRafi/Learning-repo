@@ -1,0 +1,82 @@
+Fluent Wait
+Frequency: Let's say we keep 10 seconds for an element to be available on the page, but it will check its availability once in every 5 seconds.
+
+Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)						
+.withTimeout(10, TimeUnit.SECONDS) 			
+.pollingEvery(5, TimeUnit.SECONDS) 			
+.ignoring(NoSuchElementException.class);
+The timeout of 10 seconds and frequency is 5 seconds by ignoring "NoSuchElementException" throws.Fluent Wait
+Frequency: Let's say we keep 10 seconds for an element to be available on the page, but it will check its availability once in every 5 seconds.
+
+Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)						
+.withTimeout(10, TimeUnit.SECONDS) 			
+.pollingEvery(5, TimeUnit.SECONDS) 			
+.ignoring(NoSuchElementException.class);
+The timeout of 10 seconds and frequency is 5 seconds by ignoring "NoSuchElementException" throws.
+
+Implicit Wait
+Implicit wait: It will wait for a specified time meanwhile it will not try to find the element again during the specified time. Once the time limit is crossed, it will try to search the element once again for one last time. And if it's successful, it will go with the script if not it will throw an exception.
+driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+It is mainly used when the web driver cannot find the element immediately.
+
+Explicit Wait
+Explicit wait - It waits for a certain time until the object is visible, so it clicks or acts on the object.
+WebDriverWait wait = new WebDriverWait(driver, 5);
+ 
+WebElement element = wait.until(ExpectedConditions.elementToBeClickable(By.id("user***e")));
+
+Mouse Actions
+There are "Actions" and "Action" classes.
+
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.interactions.Action;
+Now lets have an new actions object.
+
+Action builder = new Actions(driver);
+Now, let's use action using actions objects.
+
+Action mouseOverHome = builder
+     .moveToElement(link_Home)
+     .build();
+And finally we use perform() to execute the action object.
+
+mosueOverHome.perform();
+
+Mouse Actions
+Now, let's look into some of the mouse actions.
+
+Click - Helps to perform the click actions.
+
+doubleClick - Helps to perform double click actions.
+
+clickAndHold - Helps to click and hold without releasing.
+
+Release - Helps to release the mouse click action.
+
+mouseMOve - We will move the mouse with offset action (WebElement, xOffset, yOffset).
+
+Drag and Drop
+In some case, we may need to test the drag and drop action, where selenium action helps to fulfill it with the help of advanced user interactions.
+
+How it Works?
+
+As seen in the below script, we need to give the element path of the object, which we want to move the Web Element ("From") to destination Web Element ("To") with the help of element locators. Then we need to write the script for action path as shown in the below sample, which helps to drag and drop.
+
+Drag and Drop
+Please refer the sample code.
+
+WebElement From = driver.findElement(By.xpath(".//*[@id='text1']/"));
+ 
+WebElement To = driver.findElement(By.xpath(".//*[@id='textbox2']/"));
+ 
+Actions builder = new Actions(driver);
+ 
+Action dragAndDrop = builder.clickAndHold(From)
+ 
+.moveToElement(To)
+ 
+.release(To)
+ 
+.build();
+ 
+dragAndDrop.perform();
