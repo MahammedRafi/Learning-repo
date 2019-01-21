@@ -33,6 +33,13 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
+ <repositories>
+      <repository>
+<id>releases</id>
+<name>Releases</name>
+<url>http://localhost:8081/content/repositories/releases/</url>
+	      <repository>
+   </repositories>
   
   <!--<profiles>
   <profile>
