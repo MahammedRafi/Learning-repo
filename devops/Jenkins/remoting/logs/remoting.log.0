@@ -1,0 +1,31 @@
+Aug 01, 2019 11:40:30 PM hudson.remoting.jnlp.Main createEngine
+INFO: Setting up agent: server1
+Aug 01, 2019 11:40:30 PM hudson.remoting.jnlp.Main$CuiListener <init>
+INFO: Jenkins agent is running in headless mode.
+Aug 01, 2019 11:40:30 PM hudson.remoting.Engine startEngine
+INFO: Using Remoting version: 3.25
+Aug 01, 2019 11:40:30 PM org.jenkinsci.remoting.engine.WorkDirManager initializeWorkDir
+INFO: Using E:\gitrepo\Learning-repo\devops\Jenkins\remoting as a remoting work directory
+Aug 01, 2019 11:40:31 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Locating server among [http://localhost:8080/]
+Aug 01, 2019 11:40:32 PM org.jenkinsci.remoting.engine.JnlpAgentEndpointResolver resolve
+INFO: Remoting server accepts the following protocols: [JNLP4-connect, Ping]
+Aug 01, 2019 11:40:32 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Agent discovery successful
+  Agent address: localhost
+  Agent port:    50922
+  Identity:      4f:19:9d:a6:ec:e0:a7:29:73:d9:b7:6f:7a:02:52:70
+Aug 01, 2019 11:40:32 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Handshaking
+Aug 01, 2019 11:40:32 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Connecting to localhost:50922
+Aug 01, 2019 11:40:32 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Trying protocol: JNLP4-connect
+Aug 01, 2019 11:40:32 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Remote identity confirmed: 4f:19:9d:a6:ec:e0:a7:29:73:d9:b7:6f:7a:02:52:70
+Aug 01, 2019 11:40:35 PM hudson.remoting.jnlp.Main$CuiListener status
+INFO: Connected
+Aug 01, 2019 11:40:43 PM org.jenkinsci.remoting.util.AnonymousClassWarnings warn
+WARNING: Attempt to (de-)serialize anonymous class org.jenkinsci.plugins.gitclient.Git$1; see: https://jenkins.io/redirect/serialization-of-anonymous-classes/
+Aug 01, 2019 11:40:58 PM org.jenkinsci.remoting.util.AnonymousClassWarnings warn
+WARNING: Attempt to (de-)serialize anonymous class org.jenkinsci.plugins.gitclient.RemoteGitImpl$CommandInvocationHandler$1; see: https://jenkins.io/redirect/serialization-of-anonymous-classes/
